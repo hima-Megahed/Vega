@@ -1,0 +1,62 @@
+<h1>New Vehicle</h1>
+<div class="row">
+  <div class="col-sm-6">
+    <form>
+      <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <select class="form-control" id="manufacturer" name="manufacturer" (change)="onManufacturerChange()" [(ngModel)]="vehicle.manufacturerId">
+          <option value=""></option>
+          <option *ngFor="let manufacturer of manufacturers" value="{{ manufacturer.id }}">
+            {{ manufacturer.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="model">Model</label>
+        <select class="form-control" id="model">
+          <option value=""></option>
+          <option *ngFor="let model of models" value="{{ model.id }}"> {{ model.name }} </option>
+        </select>
+      </div>
+
+      <p>Is this vehicle registered?</p>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="isRegistered" id="registered" value="true">
+        <label class="form-check-label" for="registered">Yes</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="isRegistered" id="notRegistered" value="false">
+        <label class="form-check-label" for="notRegistered">No</label>
+      </div>
+
+      <h2>Features</h2>
+      <div *ngFor="let f of features" class="form-check">
+        <input class="form-check-input" type="checkbox" value="{{ f.id }}" id="feature{{ f.id }}">
+        <label class="form-check-label" for="feature{{ f.id }}">
+          {{ f.name }}
+        </label>
+      </div>
+
+      <h2>Contact</h2>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your name">
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="number" class="form-control" id="phone" placeholder="Enter your phone">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter your email">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+
+  <div class="col-sm-6"></div>
+</div>
+

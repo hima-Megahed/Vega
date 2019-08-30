@@ -33,7 +33,7 @@ namespace Vega
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "ClientApplication/dist";
             });
         }
 
@@ -66,7 +66,7 @@ namespace Vega
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApplication";
 
                 if (env.IsDevelopment())
                 {
@@ -74,6 +74,8 @@ namespace Vega
                     //spa.UseProxyToSpaDevelopmentServer("http://localhost:44385");
                 }
             });
+
+            //TODO: Add vehicle-form to ClientApplication Then start the application make sure everything is okay then delete clientApp 
         }
     }
 }
