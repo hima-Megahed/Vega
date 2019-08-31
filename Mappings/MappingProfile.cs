@@ -16,13 +16,23 @@ namespace Vega.Mappings
             CreateMap<Model, KeyValuePairResource>();
             CreateMap<Manufacturer, ManufacturerResource>();
             CreateMap<Feature, KeyValuePairResource>();
+            CreateMap<Vehicle, SaveVehicleResource>()
+                .ForMember(svr => svr.Contact, option => 
+                    option.MapFrom(v => new ContactResource{Email = v.ContactEmail, Name = v.ContactName, Phone = v.ContactPhone}))
+                .ForMember(svr => svr.Features, option => option.MapFrom(v => v.Features.Select(f => f.FeatureId)));
             CreateMap<Vehicle, VehicleResource>()
+                .ForMember(vr => vr.Model, option =>
+                    option.MapFrom(v => new KeyValuePairResource {Id = v.ModelId, Name = v.Model.Name}))
                 .ForMember(vr => vr.Contact, option => 
                     option.MapFrom(v => new ContactResource{Email = v.ContactEmail, Name = v.ContactName, Phone = v.ContactPhone}))
-                .ForMember(vr => vr.Features, option => option.MapFrom(v => v.Features.Select(f => f.FeatureId)));
+                .ForMember(vr => vr.Manufacturer, option =>
+                    option.MapFrom(v => new KeyValuePairResource {Id = v.Id, Name = v.Model.Manufacturer.Name}))
+                .ForMember(vr => vr.Features, option =>
+                    option.MapFrom(v => v.Features.Select(f => new KeyValuePairResource {Id = f.FeatureId, Name = f.Feature.Name})));
 
-            //API Resource to Domain
-            CreateMap<VehicleResource, Vehicle>()
+
+            // API Resource to Domain
+            CreateMap<SaveVehicleResource, Vehicle>()
                 .ForMember(v => v.Id, option => option.Ignore())
                 .ForMember(v => v.ContactName, 
                     option => option.MapFrom(vr => vr.Contact.Name))
