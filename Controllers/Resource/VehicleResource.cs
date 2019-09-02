@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,6 +13,7 @@ namespace Vega.Controllers.Resource
         public ContactResource Contact { get; set; }
         public KeyValuePairResource Manufacturer { get; set; }
         public ICollection<KeyValuePairResource> Features { get; set; }
+        public DateTime LastUpdate { get; set; }
         public VehicleResource()
         {
             Features = new Collection<KeyValuePairResource>();

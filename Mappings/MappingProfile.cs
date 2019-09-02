@@ -26,7 +26,7 @@ namespace Vega.Mappings
                 .ForMember(vr => vr.Contact, option => 
                     option.MapFrom(v => new ContactResource{Email = v.ContactEmail, Name = v.ContactName, Phone = v.ContactPhone}))
                 .ForMember(vr => vr.Manufacturer, option =>
-                    option.MapFrom(v => new KeyValuePairResource {Id = v.Id, Name = v.Model.Manufacturer.Name}))
+                    option.MapFrom(v => new KeyValuePairResource {Id = v.Model.Manufacturer.Id, Name = v.Model.Manufacturer.Name}))
                 .ForMember(vr => vr.Features, option =>
                     option.MapFrom(v => v.Features.Select(f => new KeyValuePairResource {Id = f.FeatureId, Name = f.Feature.Name})));
 
