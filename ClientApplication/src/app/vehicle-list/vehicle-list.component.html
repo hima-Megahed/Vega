@@ -1,0 +1,54 @@
+<h1>Vehicles</h1>
+<p>
+    <a class="btn btn-primary" [routerLink]="['/vehicle/new']">New Vehicle</a>
+</p>
+<div class="row">
+    <div class="col-7">
+        <div class="card card-body bg-light">
+            <div class="form-group">
+                <label for="manufacturerFilter">Manufacturer</label>
+                <select name="manufacturerFilter" id="manufacturerFilter" class="form-control"
+                    [(ngModel)]="query.manufacturerId" (change)="onFilterChange()">
+                    <option value=""></option>
+                    <option *ngFor="let manufacturer of manufacturers" value="{{ manufacturer.id }}">
+                        {{ manufacturer.name }}</option>
+                </select>
+            </div>
+            <button class="btn btn-info" (click)="resetFilter()">Reset</button>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-7">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th *ngFor="let c of columns" scope="col">
+                        <div *ngIf="c.isSortable; else headerNotSortable" (click)="sortBy(c.key)">
+                                {{ c.title }}
+                                <i *ngIf="query.sortBy == c.key" 
+                                [class.fa-sort-asc]="query.isSortAscending" 
+                                [class.fa-sort-desc]="!query.isSortAscending"
+                                class="fa" aria-hidden="true"></i>
+                        </div>
+                        <div *ngIf="!c.isSortable">
+                                {{ c.title }}
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vehicle of queryResult.items">
+                    <th>{{ vehicle.id }}</th>
+                    <td>{{ vehicle.manufacturer.name }}</td>
+                    <td>{{ vehicle.model.name }}</td>
+                    <td>{{ vehicle.contact.name }}</td>
+                    <td> <a [routerLink]="['/vehicle/', vehicle.id]">View</a> </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pagination [total-items]="queryResult.totalItems" [page-size]="query.PageSize" (page-changed)="onPageChange($event)"></pagination>
+    </div>
+</div>

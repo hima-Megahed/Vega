@@ -12,6 +12,8 @@ import { BsNavbarComponent } from './components/bs-navbar/bs-navbar.component';
 import { VehicleService } from './services/vehicle.service';
 import { ToastrModule } from 'ngx-toastr';
 import * as Sentry from "@sentry/browser";
+import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
+import { PaginationComponent } from './components/shared/pagination.component';
 
 Sentry.init({
   dsn: "https://1efdcf0073434cbfb668ec3a837fbc6a@sentry.io/1549121"
@@ -21,16 +23,19 @@ Sentry.init({
   declarations: [
     AppComponent,
     VehicleFormComponent,
-    BsNavbarComponent
+    BsNavbarComponent,
+    VehicleListComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '*', component: AppComponent, pathMatch: 'full' },
+      { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
       { path: 'vehicle/new', component: VehicleFormComponent},
-      { path: 'vehicle/:id', component: VehicleFormComponent }
+      { path: 'vehicle/:id', component: VehicleFormComponent },
+      { path: 'vehicles', component: VehicleListComponent},
     ]),
     BrowserAnimationsModule,
     ToastrModule.forRoot()

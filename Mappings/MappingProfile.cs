@@ -13,6 +13,7 @@ namespace Vega.Mappings
         public MappingProfile()
         {
             // Domain to API Resource
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Model, KeyValuePairResource>();
             CreateMap<Manufacturer, ManufacturerResource>();
             CreateMap<Feature, KeyValuePairResource>();
@@ -32,6 +33,7 @@ namespace Vega.Mappings
 
 
             // API Resource to Domain
+            CreateMap<VehicleQueryResource, VehicleQuery>();
             CreateMap<SaveVehicleResource, Vehicle>()
                 .ForMember(v => v.Id, option => option.Ignore())
                 .ForMember(v => v.ContactName, 
