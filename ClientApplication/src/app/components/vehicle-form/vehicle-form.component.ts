@@ -29,7 +29,7 @@ export class VehicleFormComponent implements OnInit {
 
   constructor(private vehicleService: VehicleService, private router: Router, private toaster: ToastrService ,route: ActivatedRoute) {
     route.params.subscribe(p => {
-      this.vehicle.id = +p['id'] ? +p['id'] : 0;
+      this.vehicle.id = +p['id'] || 0;
     })
   }
 
@@ -69,28 +69,14 @@ export class VehicleFormComponent implements OnInit {
   }
 
   submit() {
-    if(this.vehicle.id){
-      this.vehicleService.update(this.vehicle).subscribe(x => 
-        this.toaster.success("Vehicle <strong>Updated</strong> Successfully 👍", "Success", 
-        {closeButton: true, enableHtml: true, progressBar: true}));
-    }
-    else{
-      this.vehicleService.create(this.vehicle).subscribe(x =>
-        this.toaster.success("Vehicle <strong>Created</strong> Successfully 😃", "Success",
-        {closeButton: true, enableHtml: true, progressBar: true}));
-    }
-      
-    
+    var result$ = this.vehicle.id ? this.vehicleService.update(this.vehicle) : this.vehicleService.create(this.vehicle);
+    result$.subscribe(x => {
+      this.toaster.success("Vehicle <strong>Saved</strong> Successfully 👍", "Success", 
+      {closeButton: true, enableHtml: true, progressBar: true});
+      this.router.navigate(['/vehicles']);
+    });
   }
 
-  delete(){
-    if(confirm("Are you sure?")){
-      this.vehicleService.delete(this.vehicle.id).subscribe(x => {
-        this.toaster.info("Vehicle <strong>Deleted</strong> Successfully 👍", "Success", 
-        {closeButton: true, enableHtml: true, progressBar: true}).onHidden.subscribe(t => this.router.navigate(['/']));
-      });
-    }
-  }
   private populateModels(){
     const selectedManufacturer = this.manufacturers.find(m => m.id == this.vehicle.manufacturerId);
     this.models = selectedManufacturer ? selectedManufacturer.models : [];

@@ -1,6 +1,6 @@
 <h1>Vehicles</h1>
 <p>
-    <a class="btn btn-primary" [routerLink]="['/vehicle/new']">New Vehicle</a>
+    <a class="btn btn-primary" [routerLink]="['/vehicles/new']">New Vehicle</a>
 </p>
 <div class="row">
     <div class="col-7">
@@ -44,7 +44,10 @@
                     <td>{{ vehicle.manufacturer.name }}</td>
                     <td>{{ vehicle.model.name }}</td>
                     <td>{{ vehicle.contact.name }}</td>
-                    <td> <a [routerLink]="['/vehicle/', vehicle.id]">View</a> </td>
+                    <td> 
+                        <a class="ml-2" [routerLink]="['/vehicles/edit/', vehicle.id]">Edit</a> |
+                        <a [routerLink]="['/vehicles/', vehicle.id]">View</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
