@@ -1,3 +1,4 @@
+import { PhotoService } from './services/photo.service';
 import { AppErrorHandler } from './app.error-handler';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -15,6 +16,7 @@ import * as Sentry from "@sentry/browser";
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/shared/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 Sentry.init({
   dsn: "https://1efdcf0073434cbfb668ec3a837fbc6a@sentry.io/1549121"
@@ -41,11 +43,13 @@ Sentry.init({
       { path: 'vehicles', component: VehicleListComponent}
     ]),
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgbModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler},
-    VehicleService
+    VehicleService,
+    PhotoService
   ],
   bootstrap: [AppComponent]
 })
