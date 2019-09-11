@@ -15,9 +15,8 @@ export class ViewVehicleComponent implements OnInit {
   vehicleId: number;
   photos: any[];
   uploadResponse;
-  error;
 
-  constructor(private route: ActivatedRoute, private router: Router, private toaster: ToastrService, private vehicleService: VehicleService, private photoService: PhotoService) {
+  constructor(private route: ActivatedRoute, private router: Router, private toaster: ToastrService, private vehicleService: VehicleService, private photoService: PhotoService, private toastr: ToastrService) {
     route.params.subscribe(p => {
       this.vehicleId = +p['id'];
       if (isNaN(this.vehicleId) || this.vehicleId <= 0){
@@ -52,20 +51,24 @@ export class ViewVehicleComponent implements OnInit {
 
   uploadPhoto(){
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
-    this.photoService.upload(this.vehicleId, nativeElement.files[0]).subscribe(res=> {
+    var file = nativeElement.files[0];
+    nativeElement.value = '';
+    
+    this.photoService.upload(this.vehicleId, file).subscribe(res=> {
       if(res.status === 'progress'){
-        console.log("res", res);
         this.uploadResponse = res;
       }
       else if(res.id)
         {
-          console.log("res", res);
           this.photos.push(res);
+          this.toastr.success("Photo uploaded successfully" , "Success");
           this.uploadResponse = null;
-          this.error = null;
         }
     },
-    (err) => this.error = err);
+    (err) => {
+      this.uploadResponse = null;
+      this.toastr.error(err.error, "Error " + err.statusText);
+    });
 
   }
 
