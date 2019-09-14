@@ -1,6 +1,7 @@
 import { VehicleService } from '../../services/vehicle.service';
 import { Vehicle, KeyValuePair } from '../../Models/vehicle';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -19,9 +20,10 @@ export class VehicleListComponent implements OnInit {
     {title: 'Contact Name', key: 'contactName', isSortable: true},
     {},
   ];
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService, private auth: AuthService) { }
 
   ngOnInit() {
+    this.auth.handleAuthCallback();
     this.vehicleService.getManufacturers().subscribe((manufacturers: KeyValuePair[]) => this.manufacturers = manufacturers)
     this.populateVehicles();
   }

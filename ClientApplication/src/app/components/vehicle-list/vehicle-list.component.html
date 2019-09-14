@@ -1,6 +1,6 @@
 <h1>Vehicles</h1>
-<p>
-    <a class="btn btn-primary" [routerLink]="['/vehicles/new']">New Vehicle</a>
+<p *ngIf="auth.isAdmin() | async as admin">
+    <a *ngIf="admin" class="btn btn-primary" [routerLink]="['/vehicles/new']">New Vehicle</a>
 </p>
 <div class="row">
     <div class="col-7">

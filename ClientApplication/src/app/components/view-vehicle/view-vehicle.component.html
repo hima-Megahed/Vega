@@ -20,26 +20,33 @@
         <li>Contact Email: {{ vehicle?.contact.email }}</li>
       </ul>
       <br />
-    <p *ngIf="vehicle">
-      <a class="btn btn-primary mr-2" [routerLink]="['/vehicles/edit/', vehicle?.id]">Edit</a>
-      <button class="btn btn-danger mr-2" (click)="delete()">Delete</button>
-      <a class="btn btn-info" [routerLink]="['/vehicles']">View All Vehicles</a>
-    </p>
+
+      <div *ngIf="vehicle">
+        <div *ngIf="auth.isAdmin() | async as admin">
+          <a *ngIf="admin" class="btn btn-primary mr-2" [routerLink]="['/vehicles/edit/', vehicle?.id]">Edit</a>
+          <button *ngIf="admin" class="btn btn-danger mr-2" (click)="delete()">Delete</button>
+        </div>
+        <a class="btn btn-info" [routerLink]="['/vehicles']">View All Vehicles</a>
+      </div>
+
+
     </ng-template>
   </ngb-tab>
   <ngb-tab title="Photos">
     <ng-template ngbTabContent>
       <h2>Photos</h2>
       <div *ngIf="uploadResponse?.status === 'progress'">
-    
+
         <div class="progress" *ngIf="uploadResponse">
-          <div class="progress-bar bg-info" role="progressbar" [style.width.%]="uploadResponse?.message" aria-valuenow="uploadResponse?.message" aria-valuemin="0" aria-valuemax="100">{{uploadResponse?.message}}%</div>
+          <div class="progress-bar bg-info" role="progressbar" [style.width.%]="uploadResponse?.message"
+            aria-valuenow="uploadResponse?.message" aria-valuemin="0" aria-valuemax="100">{{uploadResponse?.message}}%
+          </div>
         </div>
-    
+
       </div>
       <input type="file" (change)="uploadPhoto()" #fileInput>
       <img *ngFor="let photo of photos" src="/uploads/{{ photo.fileName }}" class="img-thumbnail">
-      
+
     </ng-template>
   </ngb-tab>
 </ngb-tabset>

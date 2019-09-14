@@ -3,6 +3,7 @@ import { VehicleService } from './../../services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-view-vehicle',
@@ -16,7 +17,7 @@ export class ViewVehicleComponent implements OnInit {
   photos: any[];
   uploadResponse;
 
-  constructor(private route: ActivatedRoute, private router: Router, private toaster: ToastrService, private vehicleService: VehicleService, private photoService: PhotoService, private toastr: ToastrService) {
+  constructor(private route: ActivatedRoute, private router: Router, private toaster: ToastrService, private vehicleService: VehicleService, private photoService: PhotoService, private toastr: ToastrService, private auth: AuthService) {
     route.params.subscribe(p => {
       this.vehicleId = +p['id'];
       if (isNaN(this.vehicleId) || this.vehicleId <= 0){
