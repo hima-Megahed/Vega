@@ -1,5 +1,7 @@
 using System.Reflection;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +31,27 @@ namespace Vega
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+
+            var domain = $"https://{Configuration["Auth0:Domain"]}/";
+            
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = domain;
+                options.Audience = Configuration["Auth0:ApiIdentifier"];
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("create:vehicle", policy => policy.Requirements.Add(new HasScopeRequirement("create:vehicle", domain)));
+            });
+
+            // register the scope authorization handler
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), builder => builder.UseRowNumberForPaging()));
@@ -61,6 +84,9 @@ namespace Vega
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            // 2. Enable authentication middleware
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -82,7 +108,6 @@ namespace Vega
                 }
             });
 
-            //TODO: Add vehicle-form to ClientApplication Then start the application make sure everything is okay then delete clientApp 
         }
     }
 }

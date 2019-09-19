@@ -3,6 +3,7 @@ import { VehicleService } from './../../services/vehicle.service';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-view-vehicle',
@@ -15,12 +16,11 @@ export class ViewVehicleComponent implements OnInit {
   vehicleId: number;
   photos: any[];
   uploadResponse;
-  error;
 
-  constructor(private route: ActivatedRoute, private router: Router, private toaster: ToastrService, private vehicleService: VehicleService, private photoService: PhotoService) {
+  constructor(private route: ActivatedRoute, private router: Router, private toaster: ToastrService, private vehicleService: VehicleService, private photoService: PhotoService, private toastr: ToastrService, private auth: AuthService) {
     route.params.subscribe(p => {
-      this.vehicleId = +p['id'];
-      if (isNaN(this.vehicleId) || this.vehicleId <= 0){
+      this.vehicleId = +p.id;
+      if (isNaN(this.vehicleId) || this.vehicleId <= 0) {
         router.navigate(['/vehicles']);
         return;
       }
@@ -40,36 +40,34 @@ export class ViewVehicleComponent implements OnInit {
     });
   }
 
-  delete(){
-    if(confirm("Are you sure?")){
+  delete() {
+    if (confirm('Are you sure?')) {
       this.vehicleService.delete(this.vehicle.id).subscribe(x => {
-        this.toaster.info("Vehicle <strong>Deleted</strong> Successfully 👍", "Success", 
+        this.toaster.info('Vehicle <strong>Deleted</strong> Successfully 👍', 'Success',
         {closeButton: true, enableHtml: true, progressBar: true});
         this.router.navigate(['/']);
       });
     }
   }
 
-  uploadPhoto(){
-    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
-    this.photoService.upload(this.vehicleId, nativeElement.files[0]).subscribe(res => {
-      if(res.status === 'progressUp'){
-        console.log("res", res);
+  uploadPhoto() {
+    let nativeElement: HTMLInputElement = this.fileInput.nativeElement;
+    let file = nativeElement.files[0];
+    nativeElement.value = '';
+
+    this.photoService.upload(this.vehicleId, file).subscribe(res => {
+      if (res.status === 'progress') {
         this.uploadResponse = res;
-      }
-      if(res.status === 'progressDwn'){
-        console.log("res", res);
-        this.uploadResponse = res;
-      }
-      else if(res.id)
-        {
-          console.log("res", res);
+      } else if (res.id) {
           this.photos.push(res);
+          this.toastr.success('Photo uploaded successfully' , 'Success');
           this.uploadResponse = null;
-          this.error = null;
         }
     },
-    (err) => this.error = err);
+    (err) => {
+      this.uploadResponse = null;
+      this.toastr.error(err.error, 'Error ' + err.statusText);
+    });
 
   }
 

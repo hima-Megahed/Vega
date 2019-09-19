@@ -2,7 +2,7 @@ import { PhotoService } from './services/photo.service';
 import { AppErrorHandler } from './app.error-handler';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,10 +17,16 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
 import { PaginationComponent } from './components/shared/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from './services/auth.service';
+import { CallbackComponent } from './components/callback/callback.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { AuthGuard } from './guards/auth.guard';
+import { InterceptorService } from './services/interceptor.service';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 
-Sentry.init({
+/* Sentry.init({
   dsn: "https://1efdcf0073434cbfb668ec3a837fbc6a@sentry.io/1549121"
-});
+}); */
 
 @NgModule({
   declarations: [
@@ -29,7 +35,9 @@ Sentry.init({
     BsNavbarComponent,
     VehicleListComponent,
     PaginationComponent,
-    ViewVehicleComponent
+    ViewVehicleComponent,
+    CallbackComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,10 +45,12 @@ Sentry.init({
     FormsModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
-      { path: 'vehicles/new', component: VehicleFormComponent},
-      { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+      { path: 'vehicles/new', component: VehicleFormComponent, canActivate: [AdminAuthGuard]},
+      { path: 'vehicles/edit/:id', component: VehicleFormComponent, canActivate: [AuthGuard]},
       { path: 'vehicles/:id', component: ViewVehicleComponent },
-      { path: 'vehicles', component: VehicleListComponent}
+      { path: 'vehicles', component: VehicleListComponent},
+      { path: 'callback', component: CallbackComponent},
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
     ]),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
@@ -48,8 +58,12 @@ Sentry.init({
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler},
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
     VehicleService,
-    PhotoService
+    PhotoService,
+    AuthService,
+    AuthGuard,
+    AdminAuthGuard
   ],
   bootstrap: [AppComponent]
 })

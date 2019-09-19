@@ -15,9 +15,9 @@ export class PhotoService {
     return this.http.post(`/api/vehicles/${vehicleId}/photos`, formData, {
       reportProgress: true,
       observe: 'events'
-    }).pipe(map((event: any) => {
+    }).pipe((map((event: any) => {
 
-      switch (event.type) {
+        switch (event.type) {
 
         case HttpEventType.UploadProgress:
           const progressUp = Math.round(100 * (event.loaded / event.total));
@@ -29,10 +29,11 @@ export class PhotoService {
 
         case HttpEventType.Response:
           return event.body;
+
         default:
           return `Unhandled event: ${event.type}`;
-      }
-    })
+        }
+      }))
     );
   }
 
