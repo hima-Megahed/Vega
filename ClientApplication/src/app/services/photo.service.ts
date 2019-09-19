@@ -20,8 +20,12 @@ export class PhotoService {
       switch (event.type) {
 
         case HttpEventType.UploadProgress:
-          const progress = Math.round(100 * (event.loaded / event.total));
-          return { status: 'progress', message: progress };
+          const progressUp = Math.round(100 * (event.loaded / event.total));
+          return { status: 'progressUp', message: progressUp };
+        
+        case HttpEventType.DownloadProgress:
+          const progressDwn = Math.round(100 * (event.loaded / event.total));
+          return { status: 'progressDwn', message: progressDwn };
 
         case HttpEventType.Response:
           return event.body;
