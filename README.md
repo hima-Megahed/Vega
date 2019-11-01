@@ -16,12 +16,12 @@ The app was developed in an Object-oriented manner through applying modern desig
 
 ## Installation 👨🏼‍💻
 1. Fork it using git run this command in the terminal
-> git clone https://github.com/hima-Megahed/DatingApp.git
-2. Go to DatingApp.API and run
+> git clone https://github.com/hima-Megahed/Vega.git
+2. restore the packages in the application
 > dotnet restore
 3. Run the dotnet application using the command
 > dotnet run
-4. Then Go to DatingApp.SPA and run
+4. Then Go to ClientApplication and run
 > npm install
 5. Run the Angular Application using the command
 > ng serve
