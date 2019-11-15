@@ -1,5 +1,5 @@
  # Vega
-Vega 🚗 is an online cars marketplace wep application that users can sell their cars using it 💵. 
+Vega 🚗 is an online cars marketplace web application that users can sell their cars using it 💵. 
 The app was developed in an Object-oriented manner through applying modern design patterns **(e.g. Repository & UnitOfWork)** With a user-friendly design. 
 
 ## Technologies Stack 🤓
